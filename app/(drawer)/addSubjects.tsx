@@ -10,29 +10,49 @@ import { addSubject, getSubjects } from "../../database/database";
 import OriginalParallaxView from "../../components/OriginalParallaxView";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
-
+import SubjectForm from "../../components/SubjectForm";
 import { Collapsible } from "../../components/Collapsible";
 import { ExternalLink } from "../../components/ExternalLink";
 import { ThemedText } from "../../components/ThemedText";
 import { ThemedView } from "../../components/ThemedView";
+import { useRef, useState } from "react";
+import BottomSheet from "@gorhom/bottom-sheet";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
 
-const SubjectView = ({ subject }) => {
-	return (
-		<ThemedView>
-			<ThemedText>{subject.name}</ThemedText>
-		</ThemedView>
-	);
-};
+// const SubjectView = ({ subject }) => {
+// 	return (
+// 		<ThemedView>
+// 			<ThemedText>{subject.name}</ThemedText>
+// 		</ThemedView>
+// 	);
+// };
 
 const handleAddSubject = async () => {
 	await addSubject("UEC715", "IoT");
 };
 
+type RootStackParamList = {
+	Home: undefined;
+};
+
 export default function AddSubjects() {
-	const navigation = useNavigation();
+	// state
+	const [showSheet, setShowSheet] = useState(false);
+
+	// ref
+	const bottomSheetRef = useRef<BottomSheet>(null);
+	const handleClosePress = () => bottomSheetRef.current?.close();
+	const handleOpenPress = () => {
+		setShowSheet(true);
+		bottomSheetRef.current?.snapToIndex(0);
+	};
+
+	const navigation = useNavigation<DrawerNavigationProp<RootStackParamList>>();
+
 	return (
-		<>
+		<View className="flex-1 bg-red-200">
 			<OriginalParallaxView
+				// className="flex-1"
 				headerBackgroundColor={{ light: "#e9e9e9", dark: "#000000" }}
 				headerImage={
 					<View className="flex-1 p-7 mt-8 items-center">
@@ -71,7 +91,7 @@ export default function AddSubjects() {
 										color={useColorScheme() === "dark" ? "white" : "black"}
 									/>
 								</AndroidButton>
-								<AndroidButton onPress={() => navigation.openDrawer()}>
+								<AndroidButton style={null} onPress={() => navigation.openDrawer()}>
 									<AntDesign
 										name="menu-unfold"
 										size={22}
@@ -88,19 +108,19 @@ export default function AddSubjects() {
 				<Collapsible title="Quantum Computing" className="p-4 rounded-lg">
 					<ThemedText
 						type="small"
-						style={{ color: useColorScheme() === "dark" ? "#858585" : "#5f5f5f" }}
+						style={{ color: useColorScheme() === "dark" ? "#999999" : "#5f5f5f" }}
 					>
 						SUBJECT CODE: {}
 					</ThemedText>
 					<ThemedText
 						type="small"
-						style={{ color: useColorScheme() === "dark" ? "#858585" : "#5f5f5f" }}
+						style={{ color: useColorScheme() === "dark" ? "#999999" : "#5f5f5f" }}
 					>
 						SESSIONS: {}
 					</ThemedText>
 					<ThemedText
 						type="small"
-						style={{ color: useColorScheme() === "dark" ? "#858585" : "#5f5f5f" }}
+						style={{ color: useColorScheme() === "dark" ? "#999999" : "#5f5f5f" }}
 					>
 						FACULTY: {}
 					</ThemedText>
@@ -114,8 +134,13 @@ export default function AddSubjects() {
 					bottom: 32,
 					backgroundColor: "#2a2a2a",
 				}}
+				onPress={() => handleOpenPress()}
 			/>
-		</>
+
+			{showSheet && (
+				<SubjectForm closeSheet={() => handleClosePress()} ref={bottomSheetRef} />
+			)}
+		</View>
 	);
 }
 

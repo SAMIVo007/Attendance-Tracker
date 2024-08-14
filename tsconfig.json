@@ -13,6 +13,7 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "app/(drawer)/(tabs)/index.jsx"
-  ]
+    "app/(drawer)/(tabs)/index.jsx", 
+    "components/SubjectForm.tsx"  
+, "app/(drawer)/addSubjects.tsx"  ]
 }

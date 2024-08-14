@@ -11,12 +11,13 @@ export function AndroidButton({
 		/>
 	),
 	style,
+	rippleColor = "#6d6d6d",
 }) {
 	return (
 		<View className="rounded-full overflow-hidden" style={style}>
 			<Pressable
 				className="p-4"
-				android_ripple={{ color: "#6d6d6d" }}
+				android_ripple={{ color: rippleColor }}
 				onPress={onPress}
 			>
 				{children}
